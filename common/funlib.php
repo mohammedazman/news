@@ -6,7 +6,7 @@ function imageFinder($picture)
 {
     if ($picture != '')
     {
-        $imageLink = '<p class="image"><img src="http://localhost/php/newweek/pictures/' . $picture . '" width="600" height="400"></p>';
+        $imageLink = '<p class="image img-fluid rounded"><img src="http://localhost/php/newweek/pictures/' . $picture . '" width="600" height="400"></p><hr>';
         return $imageLink;
     }
 }
@@ -21,18 +21,19 @@ function sepPagePosts($arr)
         $post_date = $value["date"];
         $post_image = $value["picture"];
         $tags = $value["tags"];
-        echo '<p class="articles">' . $post_date . '<p>';
+      echo '<p>Posted on :'. $post_date . '</p><hr>';
         echo imageFinder($post_image);
-        echo '<p class="postText">' . $post_text . '</p>';
+        echo '<p class="postText lead">' . $post_text . '</p>';
         echo tags($tags);
     }
 }
 
 # shows individual post title
 
-function showTitle($arr)
+function ShowPost($arr)
 {
-    $html = '';
+
+    $html = '<div class="panel-body">';
     foreach ($arr as $key => $value) {
         $html .=  '<div class="news_singl">
 
@@ -44,6 +45,7 @@ function showTitle($arr)
 
         </div>';
     }
+    $html .='</div>';
     return $html;
 }
 
@@ -137,11 +139,18 @@ function pagination($db, $limit, $category)
 #returns tags for each post
 
 function tags($subject){
-    $html = '';
+
+    $html = '<blockquote class="blockquote">
+      <p class="mb-0"> ';
     $tags = preg_split('/\s/', $subject);
+
     foreach ($tags as $key=>$value){
-        $html .= "<a href=\"#\" class='tags'>$value</a>";
+
+        $html .= " <a href=\"#\" class='tags'>$value</a>";
     }
+    $html .="</p>
+
+  </blockquote>";
     return $html;
 }
 
@@ -295,9 +304,9 @@ function sepPagePostsLimited($arr)
         $post_date = $value["date"];
         $post_image = $value["picture"];
         $tags = $value["tags"];
-        echo '<p class="articles">' . $post_date . '</p>';
+        echo '<p>Posted on :'. $post_date . '</p><hr>';
         echo imageFinder($post_image);
-        echo '<p class="postText">' . $post_text . '...</p>' . '<p class="postText"><b>To view full text <a href="http://localhost/php/newweek/register.php">register</a> or <a href="http://localhost/php/newweek/login.php">login</a></b></p>';
+        echo '<p class="postText lead">' . $post_text . '...</p>' . '<p class="postText"><b>To view full text <a href="http://localhost/php/newweek/register.php">register</a> or <a href="http://localhost/php/newweek/login.php">login</a></b></p>';
         echo tags($tags);
     }
 }
@@ -325,6 +334,8 @@ function getCommentsForPost($db, $postId)
         $arr['date'] = $sql[$i]['date_com'];
         $arr['text'] = $sql[$i]['text_com'];
         $arr['commentid'] = $sql[$i]['id'];
+        $arr['like'] = $sql[$i]['sumL'];
+        $arr['dislike'] = $sql[$i]['sumD'];
         $arr2[$i] = $arr;
         $i++;
     }
@@ -451,15 +462,25 @@ function availableCategories($db)
 
 function checkboxCategories($db)
 {
+
+
     $categories = $db->query('SELECT `id`, `cat_title` FROM `categories`');
     $size = count($categories);
     $i = 0;
-    $html = '';
+
+
+
+    $html = '<select class="mdb-select form-control" name="category">
+    <option value="" disabled selected>Choose category </option>';
+
     while ($i < $size)
     {
-        $html .= '<p><input type="checkbox" name="category" value="' . $categories[$i]["id"] . '"> ' . $categories[$i]['cat_title'] . '</p>';
+        $html .= '  <option value="' . $categories[$i]["id"] . '" >' . $categories[$i]['cat_title'] . '</option>';
+
+
         $i++;
     }
+    $html .='</select>';
     return $html;
 }
 

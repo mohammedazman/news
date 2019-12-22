@@ -95,7 +95,7 @@ if ($_GET) {
 
 # add the dislike to the comment
 
-    elseif (isset($_GET['dislike'])) {
+    elseif ($_GET['dislike']) {
         $commentId = $_GET['dislike'];
         $userId = $_GET['userid'];
         $check = $db->query("SELECT `likes` FROM `likes`
@@ -148,8 +148,7 @@ if ($_GET) {
     <div class="card my-4">
       <h5 class="card-header">Leave a Comment:</h5>
       <div class="card-body">
-        <form
-        <form action="<?php echo $address; ?>?subject=<?php echo $postId?>&amp;action=add-comment" method="post">
+        <form>
           <div class="form-group">
             <textarea class="form-control" rows="3" id="comment-text" name="comment-text"></textarea>
           </div>
@@ -183,11 +182,11 @@ if ($_GET) {
         <?php if(isLoggedIn()): ?>
 
         <form action="<?php echo $address; ?>?like=<?php echo $commentsArray[$commentsCounter]['commentid'] ?>&amp;userid=<?php echo $_SESSION['id'] ?>" method="post" class="block">
-             <button type="submit" value="like"  class="glyphicon glyphicon-heart "><span class="badge"> <?php echo $commentsArray[$commentsCounter]['like'] ?></span></button>
+             <button type="submit" value="like"  class="glyphicon glyphicon-heart "></button>
         </form>
 
         <form action="<?php echo $address; ?>?dislike=<?php echo $commentsArray[$commentsCounter]['commentid'] ?>&amp;userid=<?php echo $_SESSION['id'] ?>" method="post" class="block">
-              <button type="submit" value="dislike" class="glyphicon glyphicon-minus"><span class="badge"> <?php echo $commentsArray[$commentsCounter]['dislike'] ?></span></button>
+              <button type="submit" value="dislike" class="glyphicon glyphicon-minus"></button>
         </form>
 
         <?php endif; ?>

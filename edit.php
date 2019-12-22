@@ -90,7 +90,15 @@ if ($postErr === 0)
                 break;
     }
 }
+if (isset($_GET['post_id'])) {
 
+  $post_id=$_GET['post_id'];
+  $posts=$db->query("SELECT * FROM news WHERE id = $post_id ");
+
+  // $sql=$db->query('UPDATE news
+  // SET title, text, picture`, category, tags, analitics
+  // WHERE auto_id = :auto_id')
+}
 
 ?>
 
@@ -111,22 +119,24 @@ if ($postErr === 0)
 <div class="card">
 
     <h2 class="card-header info-color white-text text-center py-4">
-        <strong>Add new category</strong>
+        <strong>Update new category</strong>
     </h2>
 
     <form id='newpost' method='post' action='newpost.php' enctype='multipart/form-data'>
+    <?php    foreach ($posts as $post) {?>
+
         <div class="newArt">
         <h4>Choose category * <?php echo $categoryErr;?> </h4>
         <?php echo checkboxCategories($db); ?><br>
         <div class="md-form mt-3">
           <label for="materialContactFormName"><h4> Title * <?php echo $titleErr;?></h4></label>
-            <input type="text" name="title" placeholder="Title" id="materialContactFormName" class="form-control"><br><br>
+            <input type="text" name="title" placeholder="Title" id="materialContactFormName" class="form-control" value="<?php echo htmlentities($post['title']); ?>"><br><br>
 
         </div>
 
         <div class="md-form mt-3">
           <label for="materialContactFormName"><h4>Text: * <?php echo $textErr;?></h4></label>
-<textarea form ="newpost" name="text" id="textarea" cols="45" rows="10" id="materialContactFormName" class="form-control"></textarea><br><br>
+<textarea form ="newpost" name="text" id="textarea" cols="45" rows="10" id="materialContactFormName" class="form-control" ><?php echo htmlentities($post['text']); ?></textarea><br><br>
         </div>
 
 
@@ -145,20 +155,20 @@ if ($postErr === 0)
           <p>3. There should be no whitespaces between tags and '#' sign;</p>
           <p>3. There should be no whitespaces inside tag;</p>
 
-<input type="text" name="tags" placeholder="Tags" id="materialContactFormName" class="form-control"><br>
+<input type="text" name="tags" placeholder="Tags" id="materialContactFormName" class="form-control" value="<?php echo htmlentities($post['tags']); ?>"><br>
         </div>
 
 
         <div class="md-form mt-3">
           <label for="materialContactFormName"><h4>Upload picture</h4></label>
-          <input type="file" name="fileToUpload" id="materialContactFormName" class="form-control"><?php echo $uploadErr; ?><br>
-
+         <img src="pictures/<?php echo htmlentities($post['picture']); ?>" alt="img here" class="img-circle" width="100" height="100"><br><br>
         </div>
 
 
 
         <button type="submit" name="submit" class="btn btn-default" value="submit">Submit</button>
         </div>
+      <?php } ?>
     </form>
   </div>
 

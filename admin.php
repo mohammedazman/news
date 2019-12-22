@@ -17,6 +17,11 @@ if ($_SESSION['user'] == 'admin'){
     redirectAndExit('index.php');
 }
 
+#get top 5 commentators from db
+$topCommentators = topFiveCommentators($db);
+
+#get top 5 commented news from db
+$topNews = getTopThreeCommentedNews($db);
 ?>
 
 <!DOCTYPE html>
@@ -31,11 +36,17 @@ if ($_SESSION['user'] == 'admin'){
 <body>
 <div class="wrapper">
 <?php require_once 'templates/top-menu.php';?>
+<h4>TOP COMMENTATORS</h4>
+<p><?= formatCommentators($topCommentators) ?></p>
+<h4>TOP NEWS</h4>
+<p><?= formatTopThree($topNews) ?></p>
+
     <h1>Select the action</h1>
 <p></p>
     <div class="admin">
 <p>To add new category go <a href="newcategory.php">here</a></p>
 <p>To add new post go here <a href="newpost.php">here</a></p>
+<p>To show all posts go here <a href="allpost.php">here</a></p>
     </div>
     <div class="push"></div>
 </div>

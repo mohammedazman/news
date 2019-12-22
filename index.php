@@ -16,9 +16,11 @@ foreach ($categories as $key=>$value)
 {
     $category = $value["cat_title"];
     $category_id = $value["id"];
-    $html .= '<a  href="categories/' . $category . '.' . "php" . '"><h2 class="cat_header alert alert-info">' . ucfirst($category) . '</h2></a><br>';
+
+
+    $html .= '<div class="panel panel-default"><div class="panel-heading" ><a  href="categories/' . $category . '.' . "php" . '"><h2 class="cat_header ">' . ucfirst($category) . '</h2></a></div><br>';
     $posts = $db->query("SELECT * FROM `news` WHERE `category`= '{$category_id}' LIMIT 5");
-    $html .= '<div class="articles">' . showTitle($posts) . '</div>';
+    $html .= '<div class="articles">' . ShowPost($posts) . '</div>  <div class="panel-footer"> <a href="#">المزيد...</a> </div><br>';
 }
 
 #select pictures for the carousel
@@ -36,11 +38,7 @@ foreach ($pictures as $number => $arr) {
     array_push($titlesArr, $title);
 }
 
-#get top 5 commentators from db
-$topCommentators = topFiveCommentators($db);
 
-#get top 5 commented news from db
-$topNews = getTopThreeCommentedNews($db);
 ?>
 
 <!DOCTYPE html>
@@ -56,15 +54,15 @@ $topNews = getTopThreeCommentedNews($db);
     <body>
     <?php require_once 'templates/top-menu.php';?>
     <?php require_once 'templates/carousel.php';?>
-    <div class="wrapper">
+    <div class="container">
     <p><?=isset($_GET['msg']) ? $_GET['msg'] : '';?></p>
 
-    <h4>TOP COMMENTATORS</h4>
-    <p><?= formatCommentators($topCommentators) ?></p>
-    <h4>TOP NEWS</h4>
-    <p><?= formatTopThree($topNews) ?></p>
 
-    <?php echo $html; ?>
+        <?php echo $html; ?>
+
+
+    </div>
+
 
     <div class="push"></div>
     </div>

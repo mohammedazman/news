@@ -95,7 +95,7 @@ if ($_GET) {
 
 # add the dislike to the comment
 
-    elseif (isset($_GET['dislike'])) {
+    elseif ($_GET['dislike']) {
         $commentId = $_GET['dislike'];
         $userId = $_GET['userid'];
         $check = $db->query("SELECT `likes` FROM `likes`
@@ -122,72 +122,34 @@ if ($_GET) {
 </head>
 
 <body>
-
 <div class="wrapper">
 <?php require_once ROOT . 'templates/top-menu.php';?>
-<div class="container">
 
-  <div class="row">
-
-    <!-- Post Content Column -->
-    <div class="col-lg-8">
-
-      <h1 class="mt-4"><?php echo $title;?></h1>
-<hr>
+<h1><?php echo $title;?></h1>
 
 <p><?php echo isAnalytics($db, $postId, $post)?></p>
 
-
-<a href="#">VIEWERS NOW: <span class="badge"><?=  $viewersNow[0]['COUNT(*)'] ?></span></a><br>
-<a href="#">VIEWERS NOW: <span class="badge"><?=  $viewersTotal[0]['COUNT(*)'] ?></span></a><br>
-
+<p class="note"><?= "VIEWERS NOW: " . $viewersNow[0]['COUNT(*)'] ?></p>
+<p class="note"><?= "VIEWERS TOTAL: " . $viewersTotal[0]['COUNT(*)'] ?></p>
 
 <h1>COMMENTS</h1>
-<?php if(isLoggedIn()): ?>
-
-    <div class="card my-4">
-      <h5 class="card-header">Leave a Comment:</h5>
-      <div class="card-body">
-        <form
-        <form action="<?php echo $address; ?>?subject=<?php echo $postId?>&amp;action=add-comment" method="post">
-          <div class="form-group">
-            <textarea class="form-control" rows="3" id="comment-text" name="comment-text"></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary" value="Submit comment">Submit</button>
-        </form>
-      </div>
-    </div>
-
-<?php else: ?>
-<p class="postText">Please <a href="<?= ROOT ?>login.php">login</a> to leave comments</p>
-<?php endif; ?>
     <?php if ($size === 0): ?>
     <p class="postText">There is no comments yet. You could be first to add a comment</p>
     <?php else: ?>
     <?php while ($commentsCounter<$size):?>
-      <div class="media mb-4">
-        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-        <div class="media-body">
-          <h5 class="mt-0"><?= $commentsArray[$commentsCounter]['username']; ?></h5>
-        <?= $commentsArray[$commentsCounter]['text']; ?>
-        </div>
-        <div class="media-footer">
-       <b>Date:</b> <?= $commentsArray[$commentsCounter]['date']; ?>
-        </div>
-      </div>
-
-
-
-
+        <h5><b>Comment:</b></h5>
+        <p class="comment"><?= $commentsArray[$commentsCounter]['text']; ?><p>
+        <h5><b>Date:</b> <?= $commentsArray[$commentsCounter]['date']; ?></h5>
+        <h5><b>Comment by: <?= $commentsArray[$commentsCounter]['username']; ?>, <?= $commentsArray[$commentsCounter]['email']; ?></b></h5>
 
         <?php if(isLoggedIn()): ?>
 
         <form action="<?php echo $address; ?>?like=<?php echo $commentsArray[$commentsCounter]['commentid'] ?>&amp;userid=<?php echo $_SESSION['id'] ?>" method="post" class="block">
-             <button type="submit" value="like"  class="glyphicon glyphicon-heart "><span class="badge"> <?php echo $commentsArray[$commentsCounter]['like'] ?></span></button>
+             <button type="submit" value="like"  class="glyphicon glyphicon-heart"></button> I like the comment
         </form>
 
         <form action="<?php echo $address; ?>?dislike=<?php echo $commentsArray[$commentsCounter]['commentid'] ?>&amp;userid=<?php echo $_SESSION['id'] ?>" method="post" class="block">
-              <button type="submit" value="dislike" class="glyphicon glyphicon-minus"><span class="badge"> <?php echo $commentsArray[$commentsCounter]['dislike'] ?></span></button>
+              <button type="submit" value="dislike" class="glyphicon glyphicon-minus"></button> I do not like the comment
         </form>
 
         <?php endif; ?>
@@ -196,11 +158,19 @@ if ($_GET) {
         <?php endwhile; ?>
     <?php endif; ?>
 
+    <?php if(isLoggedIn()): ?>
+        <h1>LEAVE COMMENT</h1>
+        <form action="<?php echo $address; ?>?subject=<?php echo $postId?>&amp;action=add-comment" method="post" class="newComment">
+        <textarea id="comment-text" name="comment-text" rows="8" cols="70"><?php /* echo htmlEscapeFull($commentData['text']) */ ?></textarea>
+        <div>
+            <button type="submit" value="Submit comment" class="btn btn-success">Add comment</button>
+        </div>
+        </form>
 
+<?php else: ?>
+    <p class="postText">Please <a href="<?= ROOT ?>login.php">login</a> to leave comments</p>
+<?php endif; ?>
     <div class="push"></div>
-</div>
-</div>
-</div>
 </div>
 <?php require_once ROOT. 'templates/footer.php';?>
 </body>

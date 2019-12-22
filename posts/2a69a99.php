@@ -183,11 +183,11 @@ if ($_GET) {
         <?php if(isLoggedIn()): ?>
 
         <form action="<?php echo $address; ?>?like=<?php echo $commentsArray[$commentsCounter]['commentid'] ?>&amp;userid=<?php echo $_SESSION['id'] ?>" method="post" class="block">
-             <button type="submit" value="like"  class="glyphicon glyphicon-heart "><span class="badge"> <?php echo $commentsArray[$commentsCounter]['like'] ?></span></button>
+             <button type="submit" value="like"  class="glyphicon glyphicon-heart "><?php echo $commentsArray[$commentsCounter]['like'] ?></button>
         </form>
 
         <form action="<?php echo $address; ?>?dislike=<?php echo $commentsArray[$commentsCounter]['commentid'] ?>&amp;userid=<?php echo $_SESSION['id'] ?>" method="post" class="block">
-              <button type="submit" value="dislike" class="glyphicon glyphicon-minus"><span class="badge"> <?php echo $commentsArray[$commentsCounter]['dislike'] ?></span></button>
+              <button type="submit" value="dislike" class="glyphicon glyphicon-minus"><?php echo $commentsArray[$commentsCounter]['dislike'] ?></button>
         </form>
 
         <?php endif; ?>
